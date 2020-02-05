@@ -1,14 +1,20 @@
 from django.contrib.auth.models import User
 from adventure.models import Player, Room
 
+from util.sample_generator import World
+
+w = World()
+
+w.generate_rooms(10, 10, 100)
 
 Room.objects.all().delete()
 
-r_outside = Room(title="Outside Cave Entrance",
-               description="North of you, the cave mount beckons")
 
-r_foyer = Room(title="Foyer", description="""Dim light filters in from the south. Dusty
-passages run north and east.""")
+r_outside = Room(title="Outside Cave Entrance",
+                 description="North of you, the cave mount beckons")
+
+r_foyer = Room(
+    title="Foyer", description="""Dim light filters in from the south. Dusty passages run north and east.""")
 
 r_overlook = Room(title="Grand Overlook", description="""A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
@@ -40,8 +46,8 @@ r_narrow.connectRooms(r_foyer, "w")
 r_narrow.connectRooms(r_treasure, "n")
 r_treasure.connectRooms(r_narrow, "s")
 
-players=Player.objects.all()
-for p in players:
-  p.currentRoom=r_outside.id
-  p.save()
 
+players = Player.objects.all()
+for p in players:
+    p.currentRoom = r_outside.id
+    p.save()
