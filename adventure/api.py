@@ -6,8 +6,9 @@ from decouple import config
 from django.contrib.auth.models import User
 from .models import *
 from rest_framework.decorators import api_view
+from django.core.serializers import serialize
+
 import json
-from util.create_world import gen_room
 
 # instantiate pusher
 # pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
@@ -72,7 +73,18 @@ def say(request):
 @csrf_exempt
 @api_view(['GET'])
 def map(request):
-    rooms =[]
-    rooms.append(gen_room)
-
-    return JsonResponse({'map': rooms}, safe=True)
+    maps = []
+    rooms = Room.objects.all()
+    for i in rooms:
+        room = {
+            'id': i.id,
+            'title': i.title,
+            'description': i.description,
+            'n_to': i.n_to,
+            's_to': i.s_to,
+            'e_to': i.e_to,
+            'w_to': i.w_to
+        }
+        maps.append(room)
+    # serial = serialize('json', rooms)
+    return JsonResponse({'map': maps}, safe=True)
