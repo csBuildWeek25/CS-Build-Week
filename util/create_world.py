@@ -97,30 +97,6 @@ r_narrow.connectRooms(r_foyer, "w")
 r_narrow.connectRooms(r_treasure, "n")
 r_treasure.connectRooms(r_narrow, "s")
 
-w = World()
-
-gen_room = {}
-
-for row in w.grid:
-    for rm in row:
-        room = Room(title=f'{rm.name} {rm.id}', description=rm.name)
-        room.save()
-        gen_room[(rm.x, rm.y)] = room
-        if rm.e_to != None:
-            coords = (rm.e_to.x, rm.e_to.y)
-            if coords in gen_room:
-                gen_room[rm.x, rm.y].connectRooms(gen_room[coords], 'e')
-                gen_room[coords].connectRooms(gen_room[rm.x, rm.y], 'w')
-        if rm.w_to != None:
-            coords = (rm.w_to.x, rm.w_to.y)
-            if coords in gen_room:
-                gen_room[rm.x, rm.y].connectRooms(gen_room[coords], 'w')
-                gen_room[coords].connectRooms(gen_room[rm.x, rm.y], 'e')
-        if rm.s_to != None:
-            coords = (rm.s_to.x, rm.s_to.y)
-            if coords in gen_room:
-                gen_room[rm.x, rm.y].connectRooms(gen_room[coords], 's')
-                gen_room[coords].connectRooms(gen_room[rm.x, rm.y], 'n')
 
 players = Player.objects.all()
 for p in players:
